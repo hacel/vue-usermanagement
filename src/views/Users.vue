@@ -4,52 +4,35 @@
     <modal v-if="showModal" @close="showModal = false">
       <h3 slot="header">Create User</h3>
       <div slot="body">
-        <!-- <form>
+        <form>
           <label for="username">Username: </label>
-          <input v-model="form.username" placeholder="Username" />
+          <input v-model="form.username" placeholder="Username" /><br />
           <label for="password">Password: </label>
-          <input v-model="form.password" placeholder="Password" />
+          <input v-model="form.password" placeholder="Password" /><br />
           <label for="is_admin">Admin? </label>
           <input v-model="form.is_admin" id="is_admin" type="checkbox" />
-        </form> -->
-        <b-form inline @submit.prevent="onSubmit">
-          <label class="sr-only" for="inline-form-input-username"
-            >Username</label
-          >
-          <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
-            <b-form-input
-              id="inline-form-input-username"
-              placeholder="Username"
-              v-model="form.username"
-              required
-            ></b-form-input>
-          </b-input-group>
-
-          <label for="text-password">Password</label>
-          <b-form-input
-            type="password"
-            id="text-password"
-            placeholder="Password"
-            v-model="form.password"
-            required
-          ></b-form-input>
-
-          <b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0" v-model="form.is_admin"
-            >Admin?</b-form-checkbox
-          >
-        </b-form>
+        </form>
       </div>
       <div slot="footer">
-        <b-button @click="onSubmit" variant="primary">CREATE</b-button>
-        <b-button @click="showModal = false" variant="info">CLOSE</b-button>
+        <button @click="onSubmit" variant="primary">CREATE</button>
+        <button @click="showModal = false" variant="info">CLOSE</button>
       </div>
     </modal>
     <!-- LIST -->
-    <b-table striped hover :items="users" :fields="fields">
-      <template #cell(username)="data">
-        <a :href="`/users/${data.item.id}`">{{ data.value }}</a>
-      </template>
-    </b-table>
+    <br />
+    <br />
+
+    <ul>
+      <li v-for="user in users" :key="user.id">
+        <a :href="`/users/${user.id}`">{{ user.username }}</a> ::
+        {{ user.is_admin }}
+      </li>
+    </ul>
+
+    <!-- TABLE -->
+    <form id="search">Search <input name="query" v-model="searchQuery" /></form>
+    <grid :heroes="users" :columns="gridColumns" :filter-key="searchQuery">
+    </grid>
   </div>
 </template>
 
@@ -57,9 +40,11 @@
 <script>
 import axios from "axios";
 import modal from "../components/Modal.vue";
+import grid from "../components/Grid";
 export default {
   components: {
     modal,
+    grid,
   },
   data() {
     return {
@@ -82,9 +67,15 @@ export default {
         password: "",
         is_admin: false,
       },
+      searchQuery: "",
+      gridColumns: ["username", "is_admin"],
     };
   },
   methods: {
+    async get_data() {
+      await this.$store.dispatch("load_data");
+      this.users = this.$store.getters.users;
+    },
     async onSubmit() {
       try {
         const response = await axios.post(
@@ -98,10 +89,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-    async get_data() {
-      await this.$store.dispatch("load_data");
-      this.users = this.$store.state.users;
     },
     reset_form() {
       this.form.username = "";

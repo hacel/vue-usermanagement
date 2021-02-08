@@ -8,6 +8,9 @@ export default new Vuex.Store({
   state: {
     users: null,
   },
+  getters: {
+    users: state => state.users
+  },
   mutations: {
     load_data(state, data) {
       state.users = data;

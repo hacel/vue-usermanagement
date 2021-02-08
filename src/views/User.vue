@@ -5,42 +5,25 @@
     <modal v-if="showModal" @close="showModal = false">
       <h3 slot="header">Edit User</h3>
       <div slot="body">
-        <b-form inline @submit="onSubmit">
-          <label class="sr-only" for="inline-form-input-username"
-            >Username</label
-          >
-          <b-input-group class="mb-2 mr-sm-2 mb-sm-0">
-            <b-form-input
-              id="inline-form-input-username"
-              v-model="form.username"
-              autocomplete="username"
-              required
-            ></b-form-input>
-          </b-input-group>
-
-          <label for="text-password">Password</label>
-          <b-form-input
-            type="password"
-            id="text-password"
-            placeholder="Password"
-            v-model="form.password"
-            autocomplete="current-password"
-            required
-          ></b-form-input>
-
-          <b-form-checkbox class="mb-2 mr-sm-2 mb-sm-0" v-model="form.is_admin"
-            >Admin?</b-form-checkbox
-          >
-        </b-form>
+        <form>
+          <label for="username">Username: </label>
+          <input v-model="form.username" placeholder="Username" /><br />
+          <label for="password">Password: </label>
+          <input v-model="form.password" placeholder="Password" /><br />
+          <label for="is_admin">Admin? </label>
+          <input v-model="form.is_admin" id="is_admin" type="checkbox" />
+        </form>
       </div>
       <div slot="footer">
-        <b-button @click="onSubmit" variant="primary">UPDATE</b-button>
-        <b-button @click="deleteUser" variant="danger">DELETE</b-button>
-        <b-button @click="showModal = false" variant="info">CLOSE</b-button>
+        <button @click="onSubmit" variant="primary">UPDATE</button>
+        <button @click="deleteUser" variant="danger">DELETE</button>
+        <button @click="showModal = false" variant="info">CLOSE</button>
       </div>
     </modal>
     <!-- LIST -->
-    <b-table striped hover :items="user" :fields="fields"></b-table>
+    <div id="details">
+      Username: {{ user.username }} <br />Admin: {{ user.is_admin }}
+    </div>
   </div>
 </template>
 
@@ -54,20 +37,8 @@ export default {
   },
   data() {
     return {
-      user: null,
+      user: { username: null, is_admin: null },
       showModal: false,
-      fields: [
-        {
-          key: "username",
-        },
-        {
-          key: "is_admin",
-          label: "Admin",
-          formatter: (value) => {
-            return value ? "True" : "False";
-          },
-        },
-      ],
       form: {
         username: "",
         password: "",
@@ -108,9 +79,9 @@ export default {
     async get_data() {
       await this.$store.dispatch("load_data");
       let id = this.$route.params.id;
-      this.user = [this.$store.state.users.find((user) => user.id == id)];
-      this.form.is_admin = this.user[0].is_admin;
-      this.form.username = this.user[0].username;
+      this.user = this.$store.getters.users.find((user) => user.id == id);
+      this.form.is_admin = this.user.is_admin;
+      this.form.username = this.user.username;
     },
     reset_form() {
       this.form.password = "";
