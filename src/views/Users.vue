@@ -18,17 +18,6 @@
         <button @click="showModal = false" variant="info">CLOSE</button>
       </div>
     </modal>
-    <!-- LIST -->
-    <br />
-    <br />
-
-    <ul>
-      <li v-for="user in users" :key="user.id">
-        <a :href="`/users/${user.id}`">{{ user.username }}</a> ::
-        {{ user.is_admin }}
-      </li>
-    </ul>
-
     <!-- TABLE -->
     <form id="search">Search <input name="query" v-model="searchQuery" /></form>
     <grid :heroes="users" :columns="gridColumns" :filter-key="searchQuery">
@@ -50,18 +39,6 @@ export default {
     return {
       users: null,
       showModal: false,
-      fields: [
-        {
-          key: "username",
-        },
-        {
-          key: "is_admin",
-          label: "Admin",
-          formatter: (value) => {
-            return value ? "True" : "False";
-          },
-        },
-      ],
       form: {
         username: "",
         password: "",

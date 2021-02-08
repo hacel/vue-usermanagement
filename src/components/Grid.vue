@@ -72,9 +72,13 @@ export default {
     </thead>
     <tbody>
       <tr v-for="entry in filteredHeroes" :key="entry.id">
-        <td v-for="key in columns" :key="key.id">
-          {{ entry[key] }}
+        <td>
+          <a :href="'/users/' + entry.id">{{ entry.username }}</a>
         </td>
+        <td>{{ entry.is_admin }}</td>
+        <!-- <td v-for="key in columns" :key="key.id">
+          {{ entry[key] }}
+        </td> -->
       </tr>
     </tbody>
   </table>
@@ -91,6 +95,7 @@ table {
   border: 2px solid #42b983;
   border-radius: 3px;
   background-color: #fff;
+  text-align: center;
 }
 
 th {
@@ -110,7 +115,7 @@ td {
 th,
 td {
   min-width: 120px;
-  padding: 10px 20px;
+  padding: 5px 5px;
 }
 
 th.active {
