@@ -29,7 +29,7 @@
 
 
 <script>
-import axios from "axios";
+import api from "../api/api";
 import modal from "../components/Modal.vue";
 export default {
   components: {
@@ -47,34 +47,26 @@ export default {
     };
   },
   methods: {
-    onSubmit(event) {
+    async onSubmit(event) {
       event.preventDefault();
-      axios
-        .put(`http://localhost:8000/api/0.1/users/${this.$route.params.id}/`, {
-          username: this.form.username,
-          password: this.form.password,
-          is_admin: this.form.is_admin,
-        })
-        .then((response) => {
-          console.log(response);
-          this.showModal = false;
-          this.get_data();
-          this.reset_form();
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      try {
+        const response = await api.Put(this.form, this.$route.params.id);
+        console.log(response);
+        this.showModal = false;
+        this.get_data();
+        this.reset_form();
+      } catch (error) {
+        console.log(error);
+      }
     },
-    deleteUser() {
-      axios
-        .delete(`http://localhost:8000/api/0.1/users/${this.$route.params.id}/`)
-        .then((response) => {
-          console.log(response);
-          this.$router.push("/users");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    async deleteUser() {
+      try {
+        const response = await api.Delete(this.$route.params.id);
+        console.log(response);
+        this.$router.push("/users");
+      } catch (error) {
+        console.log(error);
+      }
     },
     async get_data() {
       await this.$store.dispatch("load_data");

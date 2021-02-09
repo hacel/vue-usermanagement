@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import api from "../api/api";
 import modal from "../components/Modal.vue";
 export default {
   components: {
@@ -63,10 +63,7 @@ export default {
     },
     async onSubmit() {
       try {
-        const response = await axios.post(
-          "http://localhost:8000/api/0.1/users/",
-          this.form
-        );
+        const response = await api.Post(this.form);
         console.log(response);
         this.showModal = false;
         this.get_data();
