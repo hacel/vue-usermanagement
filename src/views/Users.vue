@@ -1,27 +1,11 @@
 <template>
   <div class="users">
-    <button id="show-modal" @click="showModal = true" class="btn btn-primary">
+    <button type="button" class="btn btn-primary" @click="show_model">
       Create User
     </button>
-
-    <!-- MODAL  -->
-    <modal v-if="showModal" @close="showModal = false">
-      <h3 slot="header">Create User</h3>
-      <div slot="body">
-        <form>
-          <label for="username">Username: </label>
-          <input v-model="form.username" placeholder="Username" /><br />
-          <label for="password">Password: </label>
-          <input v-model="form.password" placeholder="Password" /><br />
-          <label for="is_admin">Admin? </label>
-          <input v-model="form.is_admin" id="is_admin" type="checkbox" />
-        </form>
-      </div>
-      <div slot="footer">
-        <button @click="onSubmit" variant="primary">CREATE</button>
-        <button @click="showModal = false" variant="info">CLOSE</button>
-      </div>
-    </modal>
+    <UserForm @success="data_created" />
+    <!-- <button @click="onSubmit" variant="primary">CREATE</button> -->
+    <!-- <button @click="showModal = false" variant="info">CLOSE</button> -->
 
     <!-- TABLE  -->
     <table class="table">
@@ -44,22 +28,21 @@
 </template>
 
 <script>
-import api from "../api/api";
-import modal from "../components/Modal.vue";
+// import modal from "../components/Modal.vue";
+import UserForm from "../components/UserForm";
+import $ from "jquery";
+/* eslint-disable no-unused-vars */
+import boostrap from "bootstrap/dist/js/bootstrap.bundle.min.js";
+/* eslint-enable no-unused-vars */
 export default {
   components: {
-    modal,
+    // modal,
+    UserForm,
   },
   data() {
     return {
       users: null,
       showModal: false,
-      form: {
-        username: "",
-        password: "",
-        is_admin: false,
-      },
-      searchQuery: "",
     };
   },
   methods: {
@@ -67,21 +50,12 @@ export default {
       await this.$store.dispatch("load_data");
       this.users = this.$store.getters.users;
     },
-    async onSubmit() {
-      try {
-        const response = await api.Post(this.form);
-        console.log(response);
-        this.showModal = false;
-        this.get_data();
-        this.reset_form();
-      } catch (error) {
-        console.log(error);
-      }
+    data_created() {
+      this.get_data();
+      $("#exampleModal").modal("hide");
     },
-    reset_form() {
-      this.form.username = "";
-      this.form.password = "";
-      this.form.is_admin = false;
+    show_model() {
+      $("#exampleModal").modal("show");
     },
   },
   mounted() {
