@@ -18,22 +18,31 @@
         <button @click="showModal = false" variant="info">CLOSE</button>
       </div>
     </modal>
-    <!-- TABLE -->
-    <form id="search">Search <input name="query" v-model="searchQuery" /></form>
-    <grid :heroes="users" :columns="gridColumns" :filter-key="searchQuery">
-    </grid>
+
+    <!-- TABLE  -->
+    <table>
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Admin</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="entry in users" :key="entry.id">
+          <a :href="'/users/' + entry.id">{{ entry.username }}</a>
+          <td>{{ entry.is_admin }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
-
 
 <script>
 import axios from "axios";
 import modal from "../components/Modal.vue";
-import grid from "../components/Grid";
 export default {
   components: {
     modal,
-    grid,
   },
   data() {
     return {
@@ -45,7 +54,6 @@ export default {
         is_admin: false,
       },
       searchQuery: "",
-      gridColumns: ["username", "is_admin"],
     };
   },
   methods: {
