@@ -35,6 +35,7 @@ export default {
   components: {
     modal,
   },
+  props: ["id"],
   data() {
     return {
       user: { username: null, is_admin: null },
@@ -50,7 +51,7 @@ export default {
     async onSubmit(event) {
       event.preventDefault();
       try {
-        const response = await api.Put(this.form, this.$route.params.id);
+        const response = await api.Put(this.form, this.id);
         console.log(response);
         this.showModal = false;
         this.get_data();
@@ -61,7 +62,7 @@ export default {
     },
     async deleteUser() {
       try {
-        const response = await api.Delete(this.$route.params.id);
+        const response = await api.Delete(this.id);
         console.log(response);
         this.$router.push("/users");
       } catch (error) {
@@ -70,7 +71,7 @@ export default {
     },
     async get_data() {
       await this.$store.dispatch("load_data");
-      let id = this.$route.params.id;
+      let id = this.id;
       this.user = this.$store.getters.users.find((user) => user.id == id);
       this.form.is_admin = this.user.is_admin;
       this.form.username = this.user.username;

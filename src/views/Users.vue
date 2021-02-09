@@ -1,6 +1,10 @@
 <template>
   <div class="users">
-    <button id="show-modal" @click="showModal = true">Create User</button>
+    <button id="show-modal" @click="showModal = true" class="btn btn-primary">
+      Create User
+    </button>
+
+    <!-- MODAL  -->
     <modal v-if="showModal" @close="showModal = false">
       <h3 slot="header">Create User</h3>
       <div slot="body">
@@ -20,7 +24,7 @@
     </modal>
 
     <!-- TABLE  -->
-    <table>
+    <table class="table">
       <thead>
         <tr>
           <th>Username</th>
@@ -29,7 +33,9 @@
       </thead>
       <tbody>
         <tr v-for="entry in users" :key="entry.id">
-          <a :href="'/users/' + entry.id">{{ entry.username }}</a>
+          <td>
+            <a :href="'/users/' + entry.id">{{ entry.username }}</a>
+          </td>
           <td>{{ entry.is_admin }}</td>
         </tr>
       </tbody>
