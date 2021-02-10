@@ -7,19 +7,16 @@
     >
       Create User
     </button>
-
+    <h5 v-show="loading">Loading...</h5>
     <!-- TABLE  -->
     <table class="table">
       <thead>
         <tr>
           <th>Username</th>
-          <th>Admin</th>
+          <th colspan="2">Admin</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-show="loading">
-          <td colspan="2">Loading...</td>
-        </tr>
         <tr v-for="entry in users" :key="entry.id">
           <td>
             <router-link
@@ -28,6 +25,15 @@
             >
           </td>
           <td>{{ entry.is_admin }}</td>
+          <td>
+            <button
+              type="button"
+              class="btn btn-primary"
+              @click="$router.push(`/users/edit/${entry.id}`)"
+            >
+              EDIT
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>

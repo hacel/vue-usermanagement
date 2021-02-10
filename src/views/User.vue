@@ -8,8 +8,12 @@
       Edit User
     </button>
     <!-- LIST -->
-    <div id="details">
-      Username: {{ user.username }} <br />Admin: {{ user.is_admin }}
+    <div class="card" style="width: 18rem">
+      <div class="card-body">
+        <h5 class="card-title">User Details</h5>
+        <p class="card-text">Username: {{ user.username }}</p>
+        <p class="card-text">Admin: {{ user.is_admin }}</p>
+      </div>
     </div>
   </div>
 </template>
@@ -28,6 +32,7 @@ export default {
     },
   },
   mounted() {
+    this.user = { username: null, is_admin: null };
     this.get_data();
   },
 };
