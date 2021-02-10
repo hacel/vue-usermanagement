@@ -1,14 +1,38 @@
 <template>
-  <!-- needs to receive `user` from User.vue  -->
-  <!-- why do we need form?  -->
-  <!-- <form onsubmit.prevent="CreateUser"> -->
+  <!-- form always calls submit action regardless of which button was pressed -->
+  <!-- why are useredit and usercreate on the same page? -->
+  <!-- right now its an if statement to know which buttons to show but the form submit always calls createuser -->
   <div>
-    <label for="username">Username: </label>
-    <input v-model="form.username" placeholder="Username" /><br />
-    <label for="password">Password: </label>
-    <input v-model="form.password" placeholder="Password" /><br />
-    <label for="is_admin">Admin? </label>
-    <input v-model="form.is_admin" id="is_admin" type="checkbox" />
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input
+        type="text"
+        class="form-control"
+        v-model="form.username"
+        placeholder="Enter username"
+        autocomplete="username"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input
+        v-model="form.password"
+        type="password"
+        class="form-control"
+        placeholder="Password"
+        autocomplete="current-password"
+      />
+    </div>
+    <div class="form-check">
+      <input
+        v-model="form.is_admin"
+        id="is_admin"
+        type="checkbox"
+        class="form-check-input"
+      />
+      <label class="form-check-label" for="is_admin">Admin? </label>
+    </div>
     <div v-if="id">
       <button @click="PutUser" class="btn btn-primary">SAVE</button>
       <button @click="DeleteUser" class="btn btn-danger">DELETE</button>
@@ -17,7 +41,6 @@
       <button @click="CreateUser" class="btn btn-primary">CREATE</button>
     </div>
   </div>
-  <!-- </form> -->
 </template>
 
 <script>
@@ -33,41 +56,41 @@ export default {
     };
   },
   methods: {
-    // submit calls it every time
-    async CreateUser() {
-      try {
-        const response = await this.$store.dispatch("save_user", {
-          data: this.form,
-        });
-        console.log(response);
-        this.$router.push("/users");
-      } catch (error) {
-        console.log(error);
-      }
+    CreateUser() {
+      this.$store
+        .dispatch("create_user", this.form)
+        .then(() => this.$router.push("/users"))
+        .catch((e) => console.log(e));
     },
-    async PutUser(event) {
-      event.preventDefault();
-      try {
-        const response = await this.$store.dispatch("save_user", {
-          data: this.form,
-          id: this.id,
-        });
-        console.log(response);
-        this.user = response.data;
-        this.$router.push(`/users/detail/${this.id}`);
-      } catch (error) {
-        console.log(error);
-      }
+    PutUser() {
+      this.$store
+        .dispatch("save_user", { data: this.form, id: this.id })
+        .then((r) => {
+          this.$router.push(`/users/detail/${this.id}`), (this.user = r.data);
+        })
+        .catch((e) => console.log(e));
     },
-    async DeleteUser() {
-      try {
-        const response = await this.$store.dispatch("delete_user", this.id);
-        console.log(response);
-        this.$router.push("/users");
-      } catch (error) {
-        console.log(error);
-      }
+    DeleteUser() {
+      this.$store
+        .dispatch("delete_user", this.id)
+        .then(() => this.$router.push("/users"))
+        .catch((e) => console.log(e));
     },
+    get_data() {
+      this.$store
+        .dispatch("get_user", this.id)
+        .then(() => {
+          let user = this.$store.getters.user;
+          this.form.username = user.username;
+          this.form.is_admin = user.is_admin;
+        })
+        .catch((e) => console.log(e));
+    },
+  },
+  mounted() {
+    if (this.id) {
+      this.get_data();
+    }
   },
 };
 </script>

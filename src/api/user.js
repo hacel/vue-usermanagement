@@ -1,6 +1,9 @@
 import axios from 'axios'
 export default {
-    get() {
+    get(id = null) {
+        if (id) {
+            return axios.get(`http://localhost:8000/api/0.1/users/${id}`)
+        }
         return axios.get("http://localhost:8000/api/0.1/users/")
     },
 
@@ -9,7 +12,7 @@ export default {
             "http://localhost:8000/api/0.1/users/", data)
     },
 
-    put(data, id) {
+    put({ data, id }) {
         return axios.put(
             `http://localhost:8000/api/0.1/users/${id}/`, data)
     },

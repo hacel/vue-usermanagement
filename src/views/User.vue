@@ -16,20 +16,15 @@
 
 
 <script>
+import { mapState } from "vuex";
 export default {
   props: ["id"],
-  data() {
-    return {
-      user: { username: null, is_admin: null },
-    };
-  },
+  computed: mapState({
+    user: "active_user",
+  }),
   methods: {
     async get_data() {
-      if (!this.$store.getters.users) {
-        await this.$store.dispatch("get_users");
-      }
-      let id = this.id;
-      this.user = this.$store.getters.user(id);
+      this.$store.dispatch("get_user", this.id).catch((e) => console.log(e));
     },
   },
   mounted() {

@@ -51,7 +51,6 @@ export default {
       this.loading = true;
       this.$store
         .dispatch("get_users")
-        .then((r) => console.log(r))
         .catch((e) => console.log(e))
         .finally(() => (this.loading = false));
     },
