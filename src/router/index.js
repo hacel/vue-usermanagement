@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import Index from '../views/Index.vue'
 import Users from '../views/Users.vue'
 import User from '../views/User.vue'
-
+import UserEdit from '../views/UserEdit.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -18,9 +18,21 @@ const routes = [
     component: Users
   },
   {
-    path: '/users/:id',
-    name: 'user',
+    path: '/users/detail/:id',
+    name: 'user_detail',
     component: User,
+    props: true,
+  },
+  {
+    path: '/users/edit/:id',
+    name: 'user_edit',
+    component: UserEdit,
+    props: true,
+  },
+  {
+    path: '/users/new',
+    name: 'user_new',
+    component: UserEdit,
     props: true,
   }
 ]

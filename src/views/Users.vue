@@ -1,11 +1,12 @@
 <template>
   <div class="users">
-    <button type="button" class="btn btn-primary" @click="show_model">
+    <button
+      type="button"
+      class="btn btn-primary"
+      @click="$router.push('/users/new')"
+    >
       Create User
     </button>
-    <UserForm @success="data_created" />
-    <!-- <button @click="onSubmit" variant="primary">CREATE</button> -->
-    <!-- <button @click="showModal = false" variant="info">CLOSE</button> -->
 
     <!-- TABLE  -->
     <table class="table">
@@ -16,9 +17,15 @@
         </tr>
       </thead>
       <tbody>
+        <tr v-show="loading">
+          <td colspan="2">Loading...</td>
+        </tr>
         <tr v-for="entry in users" :key="entry.id">
           <td>
-            <a :href="'/users/' + entry.id">{{ entry.username }}</a>
+            <router-link
+              :to="{ name: 'user_detail', params: { id: entry.id } }"
+              >{{ entry.username }}</router-link
+            >
           </td>
           <td>{{ entry.is_admin }}</td>
         </tr>
@@ -28,34 +35,25 @@
 </template>
 
 <script>
-// import modal from "../components/Modal.vue";
-import UserForm from "../components/UserForm";
-import $ from "jquery";
-/* eslint-disable no-unused-vars */
-import boostrap from "bootstrap/dist/js/bootstrap.bundle.min.js";
-/* eslint-enable no-unused-vars */
+import { mapState } from "vuex";
+
 export default {
-  components: {
-    // modal,
-    UserForm,
-  },
-  data() {
+  computed: mapState({
+    users: "users",
+  }),
+  data: function () {
     return {
-      users: null,
-      showModal: false,
+      loading: false,
     };
   },
   methods: {
-    async get_data() {
-      await this.$store.dispatch("load_data");
-      this.users = this.$store.getters.users;
-    },
-    data_created() {
-      this.get_data();
-      $("#exampleModal").modal("hide");
-    },
-    show_model() {
-      $("#exampleModal").modal("show");
+    get_data() {
+      this.loading = true;
+      this.$store
+        .dispatch("get_users")
+        .then((r) => console.log(r))
+        .catch((e) => console.log(e))
+        .finally(() => (this.loading = false));
     },
   },
   mounted() {

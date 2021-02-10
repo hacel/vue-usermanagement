@@ -1,21 +1,21 @@
 import axios from 'axios'
 export default {
-    async Get() {
-        return await axios.get()
+    get() {
+        return axios.get("http://localhost:8000/api/0.1/users/")
     },
 
-    async Post(data) {
-        return await axios.post(
+    post(data) {
+        return axios.post(
             "http://localhost:8000/api/0.1/users/", data)
     },
 
-    async Put(data, id) {
-        return await axios.put(
+    put(data, id) {
+        return axios.put(
             `http://localhost:8000/api/0.1/users/${id}/`, data)
     },
 
-    async Delete(id) {
-        return await axios.delete(
+    delete(id) {
+        return axios.delete(
             `http://localhost:8000/api/0.1/users/${id}/`)
     },
 };
