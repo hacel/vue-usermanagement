@@ -1,5 +1,16 @@
 <template>
   <div class="users">
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <router-link :to="{ name: 'index' }">Home</router-link>
+        </li>
+        <li class="breadcrumb-item active">
+          <router-link :to="{ name: 'users' }">Users</router-link>
+        </li>
+      </ol>
+    </nav>
+
     <button
       type="button"
       class="btn btn-primary"

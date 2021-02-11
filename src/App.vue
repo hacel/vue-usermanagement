@@ -23,17 +23,31 @@
             <router-link class="nav-link" to="/users">Users</router-link>
           </li>
         </ul>
-        <form class="form-inline my-2 my-lg-0">
+        <form class="form-inline my-0 my-lg-0">
           <input
             class="form-control mr-sm-2"
             type="text"
             placeholder="Search"
             aria-label="Search"
           />
-          <button class="btn btn-secondary my-2 my-sm-0" type="submit">
+          <button class="btn btn-secondary my-0 mr-2" type="submit">
             Search
           </button>
         </form>
+        <button
+          v-if="loggedin"
+          class="btn btn-outline-secondary my-0"
+          @click="logout"
+        >
+          Sign out
+        </button>
+        <button
+          v-else
+          class="btn btn-outline-primary my-0"
+          @click="$router.push('/login')"
+        >
+          Sign in
+        </button>
       </div>
     </nav>
 
@@ -47,16 +61,34 @@
     <!-- /.container -->
   </div>
 </template>
-
+<script>
+export default {
+  computed: {
+    loggedin() {
+      return this.$store.getters.isAuthenticated;
+    },
+  },
+  methods: {
+    logout: function () {
+      this.$store.dispatch("auth_logout").then(() => {
+        this.$router.push("/");
+      });
+    },
+  },
+  created: function () {
+    this.$store.dispatch("auto_login");
+  },
+};
+</script>
 <style>
-.container {
-  margin-top: 60px;
+body {
+  padding-top: 5rem;
 }
-#app {
+/* #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* text-align: center; */
+  text-align: center;
   color: #2c3e50;
 }
 
@@ -71,5 +103,5 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
-}
+} */
 </style>
