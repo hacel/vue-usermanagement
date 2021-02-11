@@ -23,6 +23,9 @@
             <router-link class="nav-link" to="/users">Users</router-link>
           </li>
         </ul>
+        <p v-if="loggedin" class="navbar-text my-0 mr-2">
+          <span class="text-muted">Signed in as </span>{{ username }}
+        </p>
         <form class="form-inline my-0 my-lg-0">
           <input
             class="form-control mr-sm-2"
@@ -66,6 +69,9 @@ export default {
   computed: {
     loggedin() {
       return this.$store.getters.isAuthenticated;
+    },
+    username() {
+      return this.$store.getters.username;
     },
   },
   methods: {

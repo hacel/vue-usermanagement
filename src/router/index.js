@@ -9,14 +9,6 @@ import UserEdit from '../views/UserEdit.vue'
 Vue.use(VueRouter)
 
 
-const ifAuthenticated = (to, from, next) => {
-  if (store.getters.isAuthenticated) {
-    next()
-    return
-  }
-  next('/login')
-}
-
 const routes = [
   {
     path: '/',
@@ -32,21 +24,18 @@ const routes = [
     path: '/users',
     name: 'users',
     component: Users,
-    beforeEnter: ifAuthenticated,
   },
   {
     path: '/users/detail/:id',
     name: 'user_detail',
     component: User,
     props: true,
-    beforeEnter: ifAuthenticated,
   },
   {
     path: '/users/edit/:id',
     name: 'user_edit',
     component: UserEdit,
     props: true,
-    beforeEnter: ifAuthenticated,
   },
   {
     path: '/users/new',
@@ -56,10 +45,22 @@ const routes = [
   }
 ]
 
+
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  let public_routes = ['index', 'login']
+  // console.log(to)
+  // console.log(store.getters.isAuthenticated)
+  if (!public_routes.includes(to.name) && !store.getters.isAuthenticated) next({ name: 'login' })
+  // else if (to.name == 'login' && store.getters.isAuthenticated) next({ name: 'index' })
+  // desnt work i think because of the same problem that makes refreshing take you to login
+  // isAuthenticated gets read before state.token is initialized
+  else next()
 })
 
 export default router
