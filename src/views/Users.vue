@@ -56,7 +56,7 @@ import { mapState } from "vuex";
 
 export default {
   computed: mapState({
-    users: "users",
+    users: (state) => state.user.users,
   }),
   data: function () {
     return {

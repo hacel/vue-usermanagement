@@ -24,7 +24,7 @@ import { mapState } from "vuex";
 export default {
   props: ["id"],
   computed: mapState({
-    user: "active_user",
+    user: (state) => state.user.active_user,
   }),
   methods: {
     async get_data() {
