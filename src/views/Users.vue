@@ -14,7 +14,7 @@
     <button
       type="button"
       class="btn btn-primary"
-      @click="$router.push('/users/new')"
+      @click="$router.push('/users/new').catch((e) => e)"
     >
       Create User
     </button>
@@ -40,7 +40,7 @@
             <button
               type="button"
               class="btn btn-primary"
-              @click="$router.push(`/users/edit/${entry.id}`)"
+              @click="$router.push(`/users/edit/${entry.id}`).catch((e) => e)"
             >
               EDIT
             </button>

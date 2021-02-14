@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 export default {
   state: {
-    token: null,
+    token: localStorage.getItem('user-token') || null, // This makes it work
     username: null,
   },
   getters: {

@@ -3,7 +3,7 @@
     <button
       type="button"
       class="btn btn-primary"
-      @click="$router.push(`/users/edit/${id}`)"
+      @click="$router.push(`/users/edit/${id}`).catch((e) => e)"
     >
       Edit User
     </button>

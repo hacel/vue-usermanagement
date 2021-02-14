@@ -24,23 +24,27 @@ const routes = [
     path: '/users',
     name: 'users',
     component: Users,
+    meta: { requiresAuth: true }
   },
   {
     path: '/users/detail/:id',
     name: 'user_detail',
     component: User,
+    meta: { requiresAuth: true },
     props: true,
   },
   {
     path: '/users/edit/:id',
     name: 'user_edit',
     component: UserEdit,
+    meta: { requiresAuth: true },
     props: true,
   },
   {
     path: '/users/new',
     name: 'user_new',
     component: UserEdit,
+    meta: { requiresAuth: true },
     props: true,
   }
 ]
@@ -53,14 +57,20 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  let public_routes = ['index', 'login']
-  // console.log(to)
-  // console.log(store.getters.isAuthenticated)
-  if (!public_routes.includes(to.name) && !store.getters.isAuthenticated) next({ name: 'login' })
-  // else if (to.name == 'login' && store.getters.isAuthenticated) next({ name: 'index' })
-  // desnt work i think because of the same problem that makes refreshing take you to login
-  // isAuthenticated gets read before state.token is initialized
-  else next()
+  if (!store.getters.isAuthenticated) {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+      next({
+        path: '/login',
+        query: { redirect: to.fullPath }
+      })
+    } else {
+      next()
+    }
+  } else if (to.name === 'login') { // doens't work because state.token is null after refresh
+    next({ name: 'index' })
+  } else {
+    next()
+  }
 })
 
 export default router

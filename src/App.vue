@@ -47,7 +47,7 @@
         <button
           v-else
           class="btn btn-outline-primary my-0"
-          @click="$router.push('/login')"
+          @click="$router.push('/login').catch((e) => e)"
         >
           Sign in
         </button>
@@ -77,7 +77,7 @@ export default {
   methods: {
     logout: function () {
       this.$store.dispatch("auth_logout").then(() => {
-        this.$router.push("/");
+        this.$router.push("/").catch((e) => e);
       });
     },
   },

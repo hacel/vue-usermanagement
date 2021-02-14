@@ -59,21 +59,22 @@ export default {
     CreateUser() {
       this.$store
         .dispatch("create_user", this.form)
-        .then(() => this.$router.push("/users"))
+        .then(() => this.$router.push("/users").catch((e) => e))
         .catch((e) => console.log(e));
     },
     PutUser() {
       this.$store
         .dispatch("save_user", { data: this.form, id: this.id })
         .then((r) => {
-          this.$router.push(`/users/detail/${this.id}`), (this.user = r.data);
+          this.$router.push(`/users/detail/${this.id}`).catch((e) => e),
+            (this.user = r.data);
         })
         .catch((e) => console.log(e));
     },
     DeleteUser() {
       this.$store
         .dispatch("delete_user", this.id)
-        .then(() => this.$router.push("/users"))
+        .then(() => this.$router.push("/users").catch((e) => e))
         .catch((e) => console.log(e));
     },
     get_data() {

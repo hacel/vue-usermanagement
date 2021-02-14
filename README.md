@@ -33,3 +33,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 - Router guard, before each ## best practice for specifying public routes? ## block login page
   // isAuthenticated gets read before state.token is initialized
 - - Drf get user by username, # class userbyname retrieve api view
+

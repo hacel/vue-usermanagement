@@ -48,7 +48,7 @@ export default {
     login: function () {
       const { username, password } = this;
       this.$store.dispatch("auth_request", { username, password }).then(() => {
-        this.$router.push("/");
+        this.$router.push("/").catch((e) => e);
       });
     },
   },
