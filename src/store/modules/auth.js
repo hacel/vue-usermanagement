@@ -51,6 +51,11 @@ export default {
         return
       }
       const username = localStorage.getItem('username')
+      auth.get_user_by_username(username)
+        .then((r) => {
+          console.log(r.data)
+          // commit() userdata here from response
+        })
       commit('auth_success', { token, username })
       axios.defaults.headers.common['Authorization'] = token;
     }

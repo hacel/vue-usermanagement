@@ -66,7 +66,7 @@ router.beforeEach((to, from, next) => {
     } else {
       next()
     }
-  } else if (to.name === 'login') { // doens't work because state.token is null after refresh
+  } else if (to.name === 'login') {
     next({ name: 'index' })
   } else {
     next()

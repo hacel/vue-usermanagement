@@ -32,7 +32,6 @@ export default {
     },
   },
   mounted() {
-    // this.user = { username: null, is_admin: null };
     this.get_data();
   },
 };
