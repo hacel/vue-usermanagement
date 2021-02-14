@@ -11,13 +11,21 @@
       </ol>
     </nav>
 
-    <button
-      type="button"
-      class="btn btn-primary"
-      @click="$router.push('/users/new').catch((e) => e)"
-    >
-      Create User
-    </button>
+    <div class="form-inline">
+      <button
+        type="button"
+        class="btn btn-primary"
+        @click="$router.push('/users/new').catch((e) => e)"
+      >
+        Create User
+      </button>
+      <input
+        class="form-control m-2"
+        type="text"
+        v-model="search"
+        placeholder="Search"
+      />
+    </div>
     <h5 v-show="loading">Loading...</h5>
     <!-- TABLE  -->
     <table class="table">
@@ -28,7 +36,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="entry in users" :key="entry.id">
+        <tr v-for="entry in filteredList" :key="entry.id">
           <td>
             <router-link
               :to="{ name: 'user_detail', params: { id: entry.id } }"
@@ -57,10 +65,20 @@ import { mapState } from "vuex";
 export default {
   computed: mapState({
     users: (state) => state.user.users,
+    filteredList() {
+      if (this.users) {
+        return this.users.filter((user) => {
+          return user.username
+            .toLowerCase()
+            .includes(this.search.toLowerCase());
+        });
+      }
+    },
   }),
   data: function () {
     return {
       loading: false,
+      search: "",
     };
   },
   methods: {
