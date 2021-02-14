@@ -54,24 +54,39 @@
       </div>
     </nav>
 
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/users">Users</router-link>
-    </div> -->
+    <button type="button" class="btn btn-primary" @click="add_toast">
+      Show live toast
+    </button>
+
     <main role="main" class="container">
       <router-view />
+      <div v-for="msg in messages" :key="msg.id">
+        <Toast :title="msg.title" :body="msg.body" />
+      </div>
     </main>
-    <!-- /.container -->
   </div>
 </template>
 <script>
+import Toast from "./views/Toast";
 export default {
+  components: {
+    Toast,
+  },
   computed: {
     loggedin() {
       return this.$store.getters.isAuthenticated;
     },
     username() {
       return this.$store.getters.username;
+    },
+    messages() {
+      return this.$store.getters.messages;
+    },
+    toast_title() {
+      return "asd";
+    },
+    toast_body() {
+      return "body";
     },
   },
   methods: {
@@ -80,9 +95,18 @@ export default {
         this.$router.push("/").catch((e) => e);
       });
     },
+    make_toast() {
+      window.$(".toast").toast("show");
+    },
+    add_toast() {
+      this.$store.dispatch("add_message", { title: "titl3e", body: "body2" });
+      console.log(this.messages);
+      window.$(".toast").toast("show");
+    },
   },
   created: function () {
     this.$store.dispatch("auto_login");
+    this.$store.dispatch("add_message", { title: "titl3e", body: "body2" });
   },
 };
 </script>

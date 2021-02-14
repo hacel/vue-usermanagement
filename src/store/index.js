@@ -8,5 +8,19 @@ export default new Vuex.Store({
   modules: {
     user,
     auth
+  },
+  state: {
+    messages: []
+  },
+  getters: {
+    messages: state => state.messages
+  },
+  actions: {
+    add_message(context, data) {
+      this.state.messages.push(data)
+      setTimeout(() => {
+        this.state.messages.shift()
+      }, 1000);
+    }
   }
 })
