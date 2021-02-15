@@ -16,11 +16,12 @@ export default new Vuex.Store({
     messages: state => state.messages
   },
   actions: {
-    add_message(context, data) {
-      this.state.messages.push(data)
+    async toast(context, data) {
+      await this.state.messages.push(data)
+      window.$(".toast").toast('show')
       setTimeout(() => {
         this.state.messages.shift()
-      }, 1000);
+      }, 5000);
     }
   }
 })

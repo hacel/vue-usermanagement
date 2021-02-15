@@ -53,16 +53,19 @@
         </button>
       </div>
     </nav>
-
-    <button type="button" class="btn btn-primary" @click="add_toast">
-      Show live toast
-    </button>
-
+    <div
+      aria-live="polite"
+      aria-atomic="true"
+      style="position: relative; min-height: 200px; display: contents"
+    >
+      <div style="position: absolute; top: 5rem; right: 10px">
+        <div v-for="msg in messages" :key="msg.id">
+          <Toast :title="msg.title" :body="msg.body" />
+        </div>
+      </div>
+    </div>
     <main role="main" class="container">
       <router-view />
-      <div v-for="msg in messages" :key="msg.id">
-        <Toast :title="msg.title" :body="msg.body" />
-      </div>
     </main>
   </div>
 </template>
@@ -82,12 +85,6 @@ export default {
     messages() {
       return this.$store.getters.messages;
     },
-    toast_title() {
-      return "asd";
-    },
-    toast_body() {
-      return "body";
-    },
   },
   methods: {
     logout: function () {
@@ -95,18 +92,9 @@ export default {
         this.$router.push("/").catch((e) => e);
       });
     },
-    make_toast() {
-      window.$(".toast").toast("show");
-    },
-    add_toast() {
-      this.$store.dispatch("add_message", { title: "titl3e", body: "body2" });
-      console.log(this.messages);
-      window.$(".toast").toast("show");
-    },
   },
   created: function () {
     this.$store.dispatch("auto_login");
-    this.$store.dispatch("add_message", { title: "titl3e", body: "body2" });
   },
 };
 </script>
@@ -114,24 +102,4 @@ export default {
 body {
   padding-top: 5rem;
 }
-/* #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-} */
 </style>

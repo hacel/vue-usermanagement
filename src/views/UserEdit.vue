@@ -59,7 +59,13 @@ export default {
     CreateUser() {
       this.$store
         .dispatch("create_user", this.form)
-        .then(() => this.$router.push("/users").catch((e) => e))
+        .then(() => {
+          this.$router.push("/users").catch((e) => e);
+          this.$store.dispatch("toast", {
+            title: "Success",
+            body: "User created successfully",
+          });
+        })
         .catch((e) => console.log(e));
     },
     PutUser() {
